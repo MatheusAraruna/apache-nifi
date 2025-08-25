@@ -1,9 +1,12 @@
 FROM apache/nifi:latest
 
-# Garante que o diretório existe
-RUN mkdir -p /opt/nifi/nifi-current/jdbc
+ARG JDBC_POSTGRES_DRIVER_URL
 
-# Copia os drivers JDBC para dentro do container
-COPY ./config/jdbc /opt/nifi/nifi-current/jdbc
+# Copy .env file into the build context
+COPY .env ./.env
+
+# Downloads the PostgreSQL JDBC driver (version 42.7.7) from a GitHub repository
+# and saves it to the NiFi JDBC directory for database connectivity.
+RUN curl -L -o /opt/nifi/nifi-current/jdbc $JDBC_POSTGRES_DRIVER_URL
 
 EXPOSE 8443
