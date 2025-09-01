@@ -1,10 +1,11 @@
-FROM apache/nifi:latest
+FROM apache/nifi-minifi:latest
+USER root
 
-# Downloads the PostgreSQL JDBC driver (version 42.7.7) from a GitHub repository
-# and saves it to the NiFi JDBC directory for database connectivity.
-# RUN curl -L -o /opt/nifi/nifi-current/jdbc https://github.com/MatheusAraruna/apache-nifi/blob/main/config/jdbc/postgresql-42.7.7.jar
+ENV MINIFI_HOME /opt/minifi/minifi-0.5.0
 
-# Set the external host and port for the NiFi web proxy
-# ENV NIFI_WEB_PROXY_HOST=https://apache-nifi-900399650741.us-central1.run.app:8443
+ADD config.yml $MINIFI_HOME/conf/config.yml
+ADD *.nar $MINIFI_HOME/lib/
 
-EXPOSE 8443
+RUN chown -R minifi:minifi $MINIFI_HOME
+
+USER minifi
