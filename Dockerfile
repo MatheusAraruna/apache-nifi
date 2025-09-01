@@ -1,20 +1,10 @@
 FROM apache/nifi:latest
 
-# Install curl and other dependencies
-USER root
-RUN apt-get update && apt-get install -y curl
-
-# Download the PostgreSQL JDBC driver
+# Downloads the PostgreSQL JDBC driver (version 42.7.7) from a GitHub repository
+# and saves it to the NiFi JDBC directory for database connectivity.
 RUN curl -L -o /opt/nifi/nifi-current/jdbc https://github.com/MatheusAraruna/apache-nifi/blob/main/config/jdbc/postgresql-42.7.7.jar
 
-# Switch back to nifi user
-USER nifi
+# Set the external host and port for the NiFi web proxy
+ENV NIFI_WEB_PROXY_HOST=https://apache-nifi-900399650741.us-central1.run.app:8443
 
-# Expose HTTP port
 EXPOSE 8443
-
-# Environment variables for Cloud Run
-ENV NIFI_WEB_HTTP_PORT=8443
-ENV NIFI_WEB_HTTP_HOST=0.0.0.0
-ENV NIFI_CLUSTER_IS_NODE=false
-ENV NIFI_REMOTE_INPUT_HOST=0.0.0.0
