@@ -1,11 +1,7 @@
-FROM apache/nifi-minifi:latest
-USER root
+FROM apache/nifi:latest
 
-ENV MINIFI_HOME /opt/minifi/minifi-0.5.0
+# Downloads the PostgreSQL JDBC driver (version 42.7.7) from a GitHub repository
+# and saves it to the NiFi JDBC directory for database connectivity.
+#RUN curl -L -o /opt/nifi/nifi-current/jdbc https://github.com/MatheusAraruna/apache-nifi/blob/main/config/jdbc/postgresql-42.7.7.jar
 
-ADD config.yml $MINIFI_HOME/conf/config.yml
-ADD *.nar $MINIFI_HOME/lib/
-
-RUN chown -R minifi:minifi $MINIFI_HOME
-
-USER minifi
+EXPOSE 8080
